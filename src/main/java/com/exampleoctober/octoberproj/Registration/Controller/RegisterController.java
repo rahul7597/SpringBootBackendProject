@@ -3,16 +3,15 @@ package com.exampleoctober.octoberproj.Registration.Controller;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
-// import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,10 +29,7 @@ import com.exampleoctober.octoberproj.Registration.RegisterRepo.RegisterRepo;
 import com.exampleoctober.octoberproj.Registration.RegisterService.RegisterService;
 import com.exampleoctober.octoberproj.Security.JwtUtil;
 
-import io.micrometer.common.lang.NonNull;
-
 @RestController
-@CrossOrigin("*")
 public class RegisterController 
 {
     private final RegisterService serv;
@@ -58,7 +54,6 @@ public class RegisterController
         this.numexp = numexp;
         this.passexp = passexp;
         this.jwtUtil = jwtUtil;
-        // this.authenticationManager=authenticationManager;
         this.passwordEncoder=passwordEncoder;
     }
 
@@ -185,66 +180,6 @@ public class RegisterController
 
 //signup krne k baad jo OTP generate hogaa uss otp ko yaha match karenge agr otp shii hua to password generate kr sakenge
 // @PostMapping("/otpwithpassword")
-// public ResponseEntity<Map<String, String>> setpasswithOTP(@RequestBody RegisterEntity request) {
-//     try 
-//     {
-//         RegisterEntity user = repo.findByEmail(request.getEmail());
-//         // boolean otpMatch = passwordEncoder.matches(request.getOtp(), user.getOtp());
-
-//         if (user == null) {
-//             throw new RegistrationException("User not found!");
-//         }
-//         else if (request.getOtp() == null || request.getOtp().isEmpty()) {
-//             throw new RegistrationException("OTP is required!");
-//         }
-//         else if (user.getOtp() == null) {
-//             throw new RegistrationException("OTP not generated or expired!");
-//         } 
-//         // else if (!user.getOtp().equals(request.getOtp())) {
-            
-//         //     throw new RegistrationException("Invalid OTP!");
-//         // }
-//         else  if (!passwordEncoder.matches(request.getOtp(), user.getOtp())) {
-//             throw new RegistrationException("OTP does not Match!");
-//         }
-        
-//         // OTP expiry check
-//         OTP.OTPResponse otpResponse = new OTP.OTPResponse(user.getOtp(), user.getOtpExpiryTime());
-//         if (otpResponse.isExpired()) {
-//             throw new RegistrationException("OTP has expired!");
-//         }
-        
-//         // Password validation
-//         if (request.getPassword() == null || request.getPassword().trim() == "") {
-//             throw new PasswordFormatException("Password cannot be empty!");
-//         } else if (!passexp.validatePassword(request.getPassword())) {
-//             throw new PasswordFormatException("Invalid Password Format!");
-//         }
-        
-//         // Password encode
-//         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        
-//         // user.setOtp(otpResponse.otp); // OTP expire
-//         if (!request.getOtp().equals(user.getOtp())) {
-//             throw new RegistrationException("OTP does not Match!");
-//         }
-        
-//         user.setOtp(passwordEncoder.encode(otpResponse.otp));
-//         user.setOtpExpiryTime(otpResponse.expiryTime); // OTP expiry time reset
-//         user.setOtpExpiryTime(LocalDateTime.now().plusMinutes(2)); // OTP expiry time reset
-
-//         // repo.save(user);
-//         repo.save(user);
-        
-//         return ResponseEntity.ok(Collections.singletonMap("message", "Password set successfully"));
-//     } catch (RegistrationException e1) {
-//         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", e1.getMessage()));
-//     } catch (PasswordFormatException e1) {
-//         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", e1.getMessage()));
-//     }
-// }
-
-
 
 @PostMapping("/otpwithpassword")
 public ResponseEntity<Map<String, String>> setpasswithOTP(@RequestBody RegisterEntity request) {
@@ -290,11 +225,6 @@ public ResponseEntity<Map<String, String>> setpasswithOTP(@RequestBody RegisterE
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", e1.getMessage()));
     }
 }
-
-
-// Ab aapke code mein koi issue nahi hai a
-
-
 
     //agr user forget password krnaa h to yaha se vo email k through otp generate kr password ko change kr sktaa h
     @PostMapping("/generate-otp")

@@ -16,10 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-// import org.springframework.web.cors.CorsConfiguration;
-// import org.springframework.web.cors.CorsConfigurationSource;
-
-// import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
@@ -46,32 +42,13 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/usersave", "/generate-otp", "/passwordSetByEmail", "/login", "/alluser","/otpwithpassword").permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 // ) .cors(cors -> cors
                 // .configurationSource(corsConfigurationSource())
     );
-    
         logger.info("Security configuration completed");
         return http.build();
     }
-
-//   @Bean
-// public CorsConfigurationSource corsConfigurationSource() {
-//     CorsConfiguration corsConfiguration = new CorsConfiguration();
-//     corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
-//     corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//     corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
-//     corsConfiguration.setExposedHeaders(Arrays.asList("Content-Type", "Authorization"));
-//     corsConfiguration.setMaxAge(3600L);
-//     return new CorsConfigurationSource() {
-//         @Override
-//         public CorsConfiguration getCorsConfiguration(@NonNull HttpServletRequest request) {
-//             return corsConfiguration;
-//         }
-//     };
-// }
-
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

@@ -22,21 +22,22 @@ public class JwtUtil {
     @Value("${spring.security.jwt.secret}")
     private String secret;
 
-    @Value("${spring.security.jwt.expiration}")
-    private Long expiration;
+    @Value("${spring.security.jwt.expiration.days}")
+    private int expirationDays; // Expiration time in days
+
     public String generateJwtToken(RegisterEntity user) {
+        long expirationInMillis = expirationDays * 24L * 60 * 60 * 1000; // Convert days to milliseconds
         String token = JWT.create()
-            .withSubject(user.getEmail())
-            .withExpiresAt(new Date(System.currentTimeMillis() + expiration * 1000))
-            .withClaim("email", user.getEmail())
-            .withClaim("name", user.getName())
-            .withClaim("number", user.getNumber())
-            .sign(Algorithm.HMAC256(secret));
-            // .compact(); // compact() method added
+                .withSubject(user.getEmail())
+                .withExpiresAt(new Date(System.currentTimeMillis() + expirationInMillis))
+                .withClaim("email", user.getEmail())
+                .withClaim("name", user.getName())
+                .withClaim("number", user.getNumber())
+                .sign(Algorithm.HMAC256(secret));
         logger.info("JWT token generated for user {}", user.getEmail());
         return token;
     }
-    
+
     public boolean validateJwtToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
